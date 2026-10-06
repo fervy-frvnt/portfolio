@@ -1,0 +1,1143 @@
+/* ==================================================================
+   PORTFOLIO STYLES: Jason Siddharta Salim
+
+   TABLE OF CONTENTS
+     1. Design tokens   <- colours, fonts, spacing, animation speed.
+                           Most changes you will want start HERE.
+     2. Base / reset
+     3. Navigation
+     4. Hero
+     5. Shared pieces (sections, big headings, script text)
+     6. About
+     7. Skills
+     8. Projects
+     9. Image placeholders
+    10. Footer
+    11. Responsive (phones and tablets)
+    12. Reduced motion (accessibility)
+
+   Look for "EDIT:" comments. They mark what to change and how.
+   ================================================================== */
+
+   /* EDIT: CUSTOM FONT
+   font-family = the name you will use to refer to it in the rest of
+                 the CSS (you can pick any name).
+   src         = the path to your file. format("opentype") matches .otf.
+   font-weight = the weight this file is (400 = regular, 700 = bold).
+   Add one @font-face block per file if you have several weights. */
+@font-face {
+  font-family: "NoveBlack";
+  src: url("assets/fonts/Novecento\ Bold.otf") format("opentype");
+  font-style: normal;
+  font-display: swap;   /* shows a fallback font until yours loads */
+}
+@font-face {
+  font-family: "Alphz";
+  src: url("assets/fonts/Alphazet-Light.otf") format("opentype");
+  font-style: normal;
+  font-display: swap;   /* shows a fallback font until yours loads */
+}
+
+
+/* ==================================================================
+   1. DESIGN TOKENS
+   A "token" is a CSS variable. Change it once here and it updates
+   everywhere it is used on the page.
+   ================================================================== */
+
+:root {
+
+  /* ---- EDIT: COLOURS ------------------------------------------
+     --blue is the strong blue used on the hero panel and LAZELITE.
+     --blue-bright is a lighter blue used for small accents on black,
+     because the stronger blue is hard to read there.
+     Paste any hex colour, e.g. #ff3366.                            */
+  --black:        #1C1C1C;
+  --white:        #ffffff;
+  --blue:         #0000FF;
+
+  --text-on-dark:   #ffffff;
+  --muted-on-dark:  #b8b8b8;   /* secondary text on black  */
+  --line-on-dark:   #2b2b2b;   /* thin divider lines       */
+
+  --panel-light:    #ffffff;   /* background of project panels */
+  --text-on-light:  #111111;
+  --muted-on-light: #555555;   /* secondary text on white  */
+  --line-on-light:  #e3e3e3;
+
+  /* Grey placeholder boxes. Disappear once you add real images. */
+  --ph-bg:    #c4c4c4;
+  --ph-text:  #666666;
+
+  /* ---- EDIT: FONTS --------------------------------------------
+     Each font stack lists your chosen font first, then fallbacks
+     used if it fails to load. After changing a name here, also
+     change the font in the <link> in index.html (see the note
+     there).
+       display = big bold headings (names, section titles)
+       body    = paragraphs and lists
+       script  = the handwritten accents
+       jp      = the Japanese characters next to "chimatcha"      */
+  --font-display: "NoveBlack", "Novecento Black", sans-serif;
+  --font-body:    "Alphz", "Alphazet", "Segoe UI", sans-serif;
+  --font-script:  "Abuget", "Brush Script MT", cursive;
+  --font-jp:      "Noto Sans JP", "Hiragino Sans", sans-serif;
+
+  /* ---- EDIT: ANIMATION -----------------------------------S-----
+     --ease  = how motion accelerates and settles. Try "ease-out"
+               for something simpler, or play with the numbers at
+               cubic-bezier.com.
+     --dur-fast   hover effects (links, skill bars)
+     --dur-reveal image reveal when scrolling into view
+     --dur-intro  the load-in animation of the hero
+     --reveal-stagger  delay between images in one gallery
+     Bigger numbers = slower. Set any to 0s to switch that off.     */
+  --ease:           cubic-bezier(.2, .7, .2, 1);
+  --dur-fast:       .2s;
+  --dur-reveal:     .8s;
+  --dur-intro:      .9s;
+  --reveal-stagger: 90ms;
+
+  /* ---- Layout -------------------------------------------------- */
+  --nav-h:  3.5rem;                      /* height of the top bar        */
+  --gutter: clamp(1.25rem, 5vw, 4rem);   /* left/right page padding      */
+  --max:    1200px;                      /* widest the content may grow  */
+  --radius-img: 6px;                     /* corner rounding of images    */
+}
+
+
+/* ==================================================================
+   2. BASE / RESET
+   ================================================================== */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;   /* EDIT: delete this line for instant jumps when clicking nav links */
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--black);
+  color: var(--text-on-dark);
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; display: block; }
+
+h1, h2, h3, h4, p, ul, figure { margin: 0; }
+ul { padding: 0; list-style: none; }
+
+a { color: inherit; text-decoration: none; }
+
+/* Keyboard focus ring. Visible for people who navigate with Tab. */
+:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 3px;
+}
+
+/* Anchor links stop below the fixed nav instead of under it. */
+section[id], article[id], footer[id] { scroll-margin-top: var(--nav-h); }
+
+/* Lets keyboard users skip past the nav. Hidden until focused. */
+.skip {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 100;
+  padding: .6rem 1rem;
+  background: var(--white);
+  color: var(--black);
+}
+.skip:focus { top: 1rem; }
+
+.wrap {
+  width: 100%;
+  max-width: calc(var(--max) + var(--gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+
+/* ==================================================================
+   3. NAVIGATION  (fixed bar at the top)
+   ================================================================== */
+.nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 50;
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: var(--gutter);
+  background: rgba(0, 0, 0, .88);     /* EDIT: last number is transparency (0 to 1) */
+  backdrop-filter: blur(8px);
+}
+
+.nav__brand {
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  line-height: 1;
+}
+
+.nav__links { display: flex; gap: 2rem; }
+
+.nav__links a {
+  position: relative;
+  padding-block: .4rem;
+  font-size: .95rem;
+}
+
+/* The little underline that slides in on hover, and stays under the
+   section you are currently viewing (script.js sets aria-current). */
+.nav__links a::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 2px;
+  background: var(--blue);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-fast) var(--ease);
+}
+.nav__links a:hover::after,
+.nav__links a[aria-current="true"]::after { transform: scaleX(1); }
+
+/* The "Menu" button only appears on small screens (section 11). */
+.nav__toggle {
+  display: none;
+  padding: .4rem .8rem;
+  border: 1px solid var(--white);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: .9rem;
+  cursor: pointer;
+}
+
+
+/* ==================================================================
+   4. HERO
+   Two columns: black (name) and blue (disciplines).
+   ================================================================== */
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  min-height: 100svh;
+  padding-top: var(--nav-h);
+    /* EDIT: WHITE DIVIDER BAR between the hero and About.
+     The first number is the bar's thickness (it grows with the
+     screen width between 8px and 16px). Change the colour with
+     var(--white) or any hex. To remove the bar, delete this line. */
+  border-bottom: clamp(4rem, 5rem, 5rem) solid var(--white);
+  margin-top: -1vh;
+}
+
+.hero__main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: clamp(2rem, 6vw, 5rem) var(--gutter);
+}
+
+/* EDIT: NAME SIZE. Change the 6.6vw (a share of the screen width)
+   to make the name bigger or smaller. */
+.hero__name {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.6rem, 3vw, 6rem);
+  line-height: .95;
+  text-transform: uppercase;
+
+}
+
+.hero__line { display: block; }
+
+.hero__line--shadow {
+      /* EDIT: TEXT SHADOW. A solid, un-blurred copy of the text, shifted
+     to the lower left. The four values are:
+       -.06em   sideways shift (negative = left, positive = right)
+       .06em    vertical shift (positive = down, negative = up)
+       0        blur (0 = sharp edge; try 8px for a soft glow)
+       var(--blue)  the shadow colour (any colour or hex works)
+     Using "em" keeps the shadow in proportion when the text resizes.
+     To remove it, delete the text-shadow line. */
+  text-shadow: .12em .02em 0 var(--blue);
+}
+
+/* The handwritten role tucks up under the name, slightly tilted.
+   EDIT: change the rotate() angle, or margin-top to move it. */
+.hero__role {
+  display: block;
+  width: 600px;        /* the size you want it to appear */
+  max-width: 100%;     /* shrinks it on small screens so it never overflows */
+  height: auto;        /* keeps the proportions */
+  margin-top: -.9rem;
+}
+
+.hero__tagline {
+  max-width: 38ch;
+  color: var(--muted-on-dark);
+  font-weight: 300;
+  font-size: 1.05rem;
+}
+
+/* Blue panel */
+.hero__side {
+  position: relative;
+  display: grid;grid-template-columns: minmax(0, 1fr);   /* column can never grow wider than the panel */
+  grid-template-rows: 1fr auto;     /* row 1: tags, row 2: title */
+  padding: clamp(1.5rem, 4vw, 3rem) 0 0 0;
+  background-image: url("assets/images/bluebaner.png");
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;                 /* crops the title at the bottom edge */
+}
+
+.hero__words {
+  position: relative;
+  z-index: 1;                       /* sits above the divider */
+  grid-row: 1;
+  justify-self: end;
+  align-self: stretch;              /* makes the white line run the full height */
+  display: grid;
+  align-content: start;
+  justify-items: end;               /* each tag is only as wide as its text */
+  gap: .55rem;
+  padding: clamp(2.5rem, 12vh, 7rem) 0 1.5rem;
+  border-right: clamp(.3rem, .6vw, .5rem) solid var(--white);
+  font-family: var(--font-display);
+  font-size: clamp(.95rem, 1.5vw, 1.2rem);   /* EDIT: tag text size */
+  line-height: 1.2;
+  text-align: right;
+  text-transform: uppercase;
+  margin-right: clamp(.5rem, 0.5vw, 1.5rem);   /* tags AND the white line. Bigger = further left */
+
+
+}
+ 
+/* Each tag is a white box with dark text.
+   EDIT: the 3rd padding value (clamp...) is how far each box
+   extends to the left of its word. Hover colours are below. */
+.hero__words a {
+  display: block;
+  padding: .4rem .9rem .4rem clamp(1.5rem, 3vw, 2.75rem);
+  background: var(--white);
+  color: var(--black);
+
+  /* resting values, so the shadows have something to animate from */
+  text-shadow: 0 0 0 transparent;
+  box-shadow: 0 0 0 var(--white);
+
+  /* EDIT: SPEED. Change .35s to go faster or slower. */
+  transition:
+    background-color .35s var(--ease),
+    color .35s var(--ease),
+    translate .35s var(--ease),
+    text-shadow .35s var(--ease),
+    box-shadow .35s var(--ease);
+}
+
+.hero__words a:hover {
+  translate: -.5rem 0;                    /* nudges left on hover */
+  background: var(--black);
+  color: var(--white);
+  text-shadow: .12em .02em 0 var(--blue);
+  box-shadow: -.5em 0 0 var(--white);
+}
+ 
+/* "Home Page" title along the bottom. Same blue shadow idea as the
+   name (see .hero__name). EDIT: font-size for bigger/smaller text.
+   The negative margin-bottom crops it slightly at the bottom edge,
+   like your design; set it to 0 to show the full letters. */
+.hero__title {
+  position: relative;
+  z-index: 1;
+  grid-row: 2;
+  justify-self: end;
+  margin-bottom: -.1em;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1rem, 7vw, 50rem);
+  line-height: .85;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-shadow: .12em .02em 0 var(--blue);
+  margin-right: clamp(3rem, 4vw, 3.9rem)
+}
+
+/* ---- Hero entrance (plays once when the page loads) ----------
+   Each element has style="--i:N" in index.html. N sets the order:
+   the delay is N x 120ms. EDIT: change 120ms to speed up or slow
+   down the sequence, or change "translateY(1.5rem)" for how far
+   things travel. To remove the intro entirely, delete this block. */
+
+  .hero__line,
+  .hero__role,
+  .hero__tagline,
+  .hero__main .contact {
+    animation: rise var(--dur-intro) var(--ease) both;
+    animation-delay: calc(var(--i, 0) * 120ms);
+  }
+  .hero__words li {
+    animation: slide-in var(--dur-intro) var(--ease) both;
+    animation-delay: calc(var(--i, 0) * 120ms + 300ms);
+  }
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(1.5rem); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes slide-in {
+  from { opacity: 0; transform: translateX(2.5rem); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Contact list (used in the hero and in the footer) */
+.contact {
+  display: grid;
+  gap: .35rem;
+  font-size: .95rem;
+}
+.contact li {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr;
+  gap: .75rem;
+}
+.contact__label { color: var(--muted-on-dark); }
+.contact a {
+  overflow-wrap: anywhere;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: .2em;
+  transition: text-decoration-color var(--dur-fast);
+}
+.contact a:hover { text-decoration-color: currentColor; }
+
+
+/* ==================================================================
+   5. SHARED PIECES
+   ================================================================== */
+.section { padding-block: clamp(4rem, 9vw, 7rem); }
+
+/* Big uppercase heading with a handwritten word over it
+   (used for "Skillsets" and "Project Gallery"). */
+.big-heading {
+  position: relative;
+  display: inline-block;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.6rem, 9vw, 7rem);
+  line-height: .95;
+  text-transform: uppercase;
+}
+.big-heading__script {
+  position: absolute;
+  left: 38%;
+  bottom: -.32em;
+  font-family: var(--font-script);
+  font-size: .5em;
+  line-height: 1;
+  text-transform: none;
+  color: var(--blue);
+  rotate: -5deg;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.script { font-family: var(--font-script); }
+
+
+/* ==================================================================
+   6. ABOUT
+   ================================================================== */
+
+.about .wrap {
+  max-width: none;      /* no 1200px limit for this section */
+}
+
+.about__grid {
+  padding-left: clamp(7rem, 15vw, 16rem);
+  display: grid;
+  grid-template-columns: minmax(220px, 340px) minmax(0, 1fr);   /* photo column is as wide as the signature */
+  gap: clamp(1rem, 5vw, 3rem);      /* space between the signature and the text */
+  align-items: center;
+}
+
+.about__photo {
+  position: relative;
+  padding-bottom: 2.5rem;          /* room under the photo for the signature */
+}
+
+.about__photo > :first-child {
+  width: 80%;
+  margin-left: 17%;
+}
+/* The signature. It must come after the photo in index.html.
+   EDIT: bottom  = 0 puts it at the bottom edge. Raise it to move it up
+                   onto the photo, make it negative to push it down.
+   EDIT: width   = 100% fits the column. Go higher to enlarge it. */
+.about__signature {
+  position: absolute;
+  left: -3rem;
+  bottom: -5rem;
+  width: 85%;
+  height: auto;
+  pointer-events: none;
+}
+
+.about__photo .script {
+  margin-top: .75rem;
+  font-size: 1.6rem;
+  line-height: 1.1;
+  color: var(--muted-on-dark);
+}
+
+/* EDIT: INTRO TEXT SIZE. Change the middle number of clamp(). */
+.about__text {
+  max-width: 60ch;
+  font-size: clamp(.95rem, 1.5vw, 1.3rem);   /* EDIT: text size */
+  font-weight: 300;
+  line-height: 1.5;                          /* Figma looks tight. Raise for more air between lines */
+  letter-spacing: .02em;                 
+  margin-left: clamp(2rem, 6vw, 6rem);   /* bigger = further right */
+}
+
+
+/* ==================================================================
+   7. SKILLS
+   ================================================================== */
+.skills-section { padding-top: 2rem; }   /* the About section above already pads the gap */
+
+.skills {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(2rem, 6vw, 5rem);
+  margin-top: 3.5rem;
+}
+
+.skill {
+  position: relative;
+  padding: 1.4rem 0 1.6rem 1.25rem;
+  border-top: 1px solid var(--line-on-dark);
+}
+
+.cursive__skill {
+  position: absolute;
+  left: -2.5rem;
+  bottom: -1rem;
+  width: 70%;
+  height: auto;
+  pointer-events: none;
+}
+
+/* Blue bar that grows down the left side on hover.
+   EDIT: change the width (4px) or colour, or delete both
+   .skill::before rules to remove the hover effect. */
+.skill::before {
+  content: "";
+  position: absolute;
+  left: 0; top: -1px; bottom: 0;
+  width: 4px;
+  background: var(--blue);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform var(--dur-fast) var(--ease);
+}
+.skill:hover::before { transform: scaleY(1); }
+
+.skill__title {
+  margin-bottom: .6rem;
+  font-size: clamp(1.4rem, 2.6vw, 2rem);
+  font-weight: 300;
+  line-height: 1.1;
+}
+.skill__title strong {
+  margin-right: .3em;
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+.skill__desc  { color: var(--muted-on-dark); font-weight: 300; }
+.skill__tools { margin-top: .15rem; }
+
+
+/* ==================================================================
+   8. PROJECTS
+   Each project is a white panel with a gallery and a text column.
+   ================================================================== */
+.projects { padding-top: clamp(2rem, 5vw, 4rem); }
+
+.projects__head { padding-bottom: clamp(3rem, 6vw, 5rem); }
+
+.project {
+  background: var(--panel-light);
+  color: var(--text-on-light);
+}
+.project + .project { border-top: 1px solid var(--line-on-light); }
+
+.project__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.5fr);
+  gap: clamp(3rem, 8vw, 9rem);
+  align-items: start;
+  max-width: calc(var(--max) + var(--gutter) * 2);
+  margin-inline: auto;
+  padding: clamp(3rem, 7vw, 6rem) var(--gutter);
+}
+
+.project__image {
+  width: 145%;
+  max-width: none;       /* lifts the default limit that stops it growing past the column */
+  margin-left: -50%;     /* shifts it left so the extra width spills outward */
+}
+
+.project__image--visor {
+  width: 120%;
+  max-width: none;       /* lifts the default limit that stops it growing past the column */
+  margin-left: -35%;     /* shifts it left so the extra width spills outward */
+}
+
+.cursive__proj {
+  position: absolute;
+  left: -2rem;
+  bottom: -1rem;
+  width: 50%;
+  height: auto;
+  pointer-events: none;
+}
+
+/* The text column stays in view while you scroll past tall galleries.
+   EDIT: delete "position: sticky" to turn that off. */
+.project__body {
+  top: calc(var(--nav-h) + 2rem);
+  display: grid;
+  gap: 1rem;
+  max-width: 46ch;
+}
+
+.project__body--vids {
+  position: sticky;
+}
+
+.project__subtitle { 
+  color: var(--muted-on-light); 
+  font-weight: 600; 
+  padding-top: 1rem;
+}
+.project__label    { margin-top: .5rem; font-size: 1rem; font-weight: 600; }
+.project__tools    { color: var(--muted-on-light); }
+.project__tools strong { color: var(--text-on-light); font-weight: 600; }
+
+.highlights { list-style: disc; padding-left: 1.2rem; display: grid; gap: .55rem; }
+.highlights li::marker { color: var(--blue); }
+
+.project__link {
+  justify-self: start;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: .2em;
+}
+
+.project__brand {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  font-weight: 600;
+}
+
+/* The link wraps the logo and the name */
+.project__brand-link {
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  transition: opacity var(--dur-fast) var(--ease);
+}
+.project__brand-link:hover {
+  opacity: .65;                 /* EDIT: the hover effect. Try translate or underline instead */
+}
+
+/* The round logo */
+.project__logo {
+  width: 3rem;                /* EDIT: logo size */
+  height: 3rem;
+  border-radius: 50%;           /* round. Delete this line to keep it square */
+  object-fit: fill;            /* fills the circle without squashing the image */
+}
+
+/* Video gallery: 2 columns, 16:9 boxes, no offset */
+.gallery--videos {
+  grid-template-columns: repeat(1, minmax(0, 1fr));   /* EDIT: use 3 for three columns */
+}
+.gallery--videos .ph {
+  aspect-ratio: 16 / 9;          /* EDIT: match your videos' shape (e.g. 4 / 3, 21 / 9) */
+  background: #000;
+}
+.gallery--videos img {
+  object-fit: contain;           /* shows the whole GIF. Use "cover" to fill the box and crop the edges */
+}
+
+/* With an odd number of items, the last one spans the full width */
+.gallery--videos .ph:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+/* ---- Project title styles ------------------------------------
+   Each project gets its own title look to match your designs.
+   EDIT: change font-size / colour / font-family on any of these. */
+.title { line-height: 1; }
+
+/* chimatcha: lowercase heavy text with 抹茶 stacked beside it */
+.title--chimatcha {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
+  text-transform: lowercase;
+}
+.title__jp {
+  writing-mode: vertical-rl;       /* stacks the two characters */
+  padding-left: .6rem;
+  border-left: 2px solid var(--text-on-light);
+  font-family: var(--font-jp);
+  font-weight: 700;
+  font-size: .42em;
+  line-height: 1.15;
+}
+
+/* Food Delivery App / Video Edits: stacked heavy words */
+.title--stack {
+  display: grid;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.4rem, 5.5vw, 4rem);
+  line-height: .92;
+  text-transform: uppercase;
+}
+.title--stack span { display: block; }
+.title__script {
+  margin-top: .3rem;
+  font-family: var(--font-script);
+  font-size: .5em;
+  line-height: 1;
+  text-transform: none;
+  color: var(--blue);
+}
+
+/* Christian Wijaya: handwritten name */
+.title--script {
+  font-family: var(--font-script);
+  font-weight: 400;
+  font-size: clamp(2.8rem, 6vw, 4.6rem);
+  line-height: 1.05;
+}
+
+/* VISOR: thin, widely spaced letters */
+.title--spaced {
+  font-weight: 300;
+  font-size: clamp(2rem, 4.5vw, 3.2rem);
+  letter-spacing: .3em;
+  text-transform: uppercase;
+}
+
+/* LAZELITE: heavy, slanted, blue */
+.title--blue {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-style: italic;
+  font-size: clamp(2.6rem, 5.6vw, 4rem);
+  letter-spacing: .01em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+
+/* ---- Galleries -------------------------------------------------
+   The grids that hold the grey placeholder boxes. */
+.gallery {
+  display: grid;
+  gap: .9rem;
+  align-content: start;
+}
+
+/* three phone screens; the middle one sits a little lower */
+.gallery--phones { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.gallery--phones .ph:nth-child(2) { translate: 0 1.5rem; }
+
+/* 2 x 2 grid */
+.gallery--grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+/* one wide image, two below */
+.gallery--feature { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.gallery--feature .ph:first-child { grid-column: 1 / -1; }
+
+/* ---- Image reveal (scroll animation) --------------------------
+   When a gallery scrolls into view, script.js adds the class
+   "is-visible" and each image "wipes" in from the top, one after
+   another. This only applies when JavaScript is running
+   (the .js class is set in index.html).
+
+   EDIT: DIFFERENT ANIMATION
+   - Fade instead of wipe:  replace the clip-path lines with
+         opacity: 0;    and    opacity: 1;
+   - Slide up instead:  use  transform: translateY(2rem);  and
+         transform: none;
+   - No animation: delete this whole block.
+   Speed is --dur-reveal; gap between images is --reveal-stagger
+   (both in section 1).                                            */
+.js .gallery .ph {
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path var(--dur-reveal) var(--ease);
+  transition-delay: calc(var(--i, 0) * var(--reveal-stagger));
+}
+.js .gallery.is-visible .ph { clip-path: inset(0); }
+
+
+/* ==================================================================
+   9. IMAGE PLACEHOLDERS  (the grey boxes)
+   Shape classes set the aspect ratio. Once you add an <img> inside
+   (see the note in index.html), it covers the grey box and the
+   label text.
+   ================================================================== */
+.ph {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  padding: .5rem;
+  background: var(--ph-bg);
+  color: var(--ph-text);
+  border-radius: var(--radius-img);
+  font-size: .8rem;
+  line-height: 1.3;
+  text-align: center;
+}
+
+.ph--portrait  { aspect-ratio: 9 / 18; border-radius: 1.2rem; }   /* phone screen */
+.ph--landscape { aspect-ratio: 16 / 10; }
+.ph--tall      { aspect-ratio: 4 / 5; }
+.ph--square    { aspect-ratio: 1; }
+.ph--logo      { width: 2.2rem; aspect-ratio: 1; padding: 0; border-radius: 50%; }
+
+.ph img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;   /* EDIT: use "contain" to show the whole image without cropping */
+}
+
+/* ==================================================================
+   MUSIC PLAYER
+   A white panel (like the project panels) with the current track,
+   and a two-column tracklist below it (like the skills list).
+   ================================================================== */
+.music {
+  padding-block: clamp(4rem, 9vw, 7rem);
+  border-top: 1px solid var(--line-on-dark);
+}
+
+.music__intro {
+  max-width: 48ch;
+  margin-top: 1.5rem;
+  color: var(--muted-on-dark);
+  font-weight: 300;
+}
+
+.player {
+  display: grid;
+  grid-template-columns: minmax(180px, 320px) minmax(0, 1fr);
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: center;
+  margin-top: 3rem;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  background: var(--panel-light);
+  color: var(--text-on-light);
+}
+
+/* Cover art. Falls back to a blue tile with the track number. */
+.player__cover {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: var(--blue);
+  color: var(--white);
+  box-shadow: .6rem .6rem 0 var(--black);
+}
+.player__cover img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.player__cover-num {
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 10vw, 8rem);
+  line-height: 1;
+}
+
+.player__main { display: grid; gap: .6rem; min-width: 0; }
+
+.player__kicker {
+  font-family: var(--font-display);
+  font-size: .85rem;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--muted-on-light);
+}
+
+/* Same solid blue shadow as the hero name */
+.player__title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2rem, 4.5vw, 3.4rem);
+  line-height: .95;
+  text-transform: uppercase;
+  color: var(--black);  
+  overflow-wrap: anywhere;
+}
+
+.player__meta { font-family: var(--font-body); color: var(--muted-on-light); font-weight: 600; }
+
+.player__progress { margin-top: 1rem; }
+
+.player__times {
+  display: flex;
+  justify-content: space-between;
+  margin-top: .3rem;
+  font-size: .85rem;
+  color: var(--muted-on-light);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Sliders (seek + volume) -----------------------------------
+   script.js sets --pct so the track fills blue up to the handle. */
+.player__range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 1rem;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.player__range::-webkit-slider-runnable-track {
+  height: 6px;
+  background: linear-gradient(to right, var(--blue) var(--pct, 0%), var(--line-on-light) var(--pct, 0%));
+}
+.player__range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  margin-top: -4px;
+  border: 0;
+  border-radius: 0;
+  background: var(--black);
+}
+.player__range::-moz-range-track   { height: 6px; background: var(--line-on-light); }
+.player__range::-moz-range-progress { height: 6px; background: var(--blue); }
+.player__range::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: 0;
+  border-radius: 0;
+  background: var(--black);
+}
+
+/* ---- Buttons ----------------------------------------------------
+   White squares like the hero tags. Hover flips to black with a
+   blue offset shadow. */
+.player__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .75rem;
+  margin-top: .5rem;
+}
+
+.player__btn {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border: 2px solid var(--black);
+  background: var(--white);
+  color: var(--black);
+  cursor: pointer;
+  box-shadow: 0 0 0 var(--blue);
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease),
+    translate var(--dur-fast) var(--ease),
+    box-shadow var(--dur-fast) var(--ease);
+}
+.player__btn:hover {
+  background: var(--black);
+  color: var(--white);
+  translate: -.15rem -.15rem;
+  box-shadow: .3rem .3rem 0 var(--blue);
+}
+.player__btn--main { width: 4rem; height: 4rem; }
+
+/* Show play OR pause icon depending on state */
+.player .icon-pause { display: none; }
+.player.is-playing .icon-play  { display: none; }
+.player.is-playing .icon-pause { display: block; }
+
+.player__volume {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  margin-left: auto;
+  font-size: .85rem;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--muted-on-light);
+}
+.player__volume .player__range { width: 6rem; }
+
+/* ---- Tracklist --------------------------------------------------
+   Same look as .skill: top line, blue bar on hover. The track that
+   is loaded gets aria-current="true" from script.js. */
+.tracklist {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(2rem, 6vw, 5rem);
+  margin-top: 2.5rem;
+  list-style: none; 
+  padding: 0;
+  counter-reset: track;
+}
+.track { counter-increment: track; }
+
+.track a {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.75rem minmax(0, 1fr);
+  align-items: baseline;
+  gap: .5rem;
+  padding: 1.1rem 0 1.2rem 1.25rem;
+  border-top: 1px solid var(--line-on-dark);
+}
+.track a::before {
+  content: "";
+  position: absolute;
+  left: 0; top: -1px; bottom: 0;
+  width: 4px;
+  background: var(--blue);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform var(--dur-fast) var(--ease);
+}
+.track a:hover::before,
+.track a[aria-current="true"]::before { transform: scaleY(1); }
+
+.track__num::before {
+  content: counter(track, decimal-leading-zero);
+  font-family: var(--font-display);
+  color: var(--muted-on-dark);
+}
+.track__text { display: grid; }
+.track__title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+  text-transform: uppercase;
+  transition: text-shadow var(--dur-fast) var(--ease);
+}
+.track__meta { 
+  font-family: var(--font-body); 
+  color: var(--muted-on-dark); 
+  font-weight: 400; }
+
+.track a[aria-current="true"] .track__title { text-shadow: .08em .02em 0 var(--blue); }
+.track a[aria-current="true"] .track__num::before { color: var(--white); }
+
+/* ---- Responsive ---- */
+@media (max-width: 900px) {
+  .tracklist { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 800px) {
+  .player { grid-template-columns: minmax(0, 1fr); }
+  .player__cover { max-width: 280px; }
+  .player__volume { margin-left: 0; width: 100%; }
+  .player__volume .player__range { flex: 1; width: auto; }
+}
+
+/* ==================================================================
+   10. FOOTER
+   ================================================================== */
+.footer { padding-block: clamp(3rem, 7vw, 5rem) 2rem; }
+
+.footer__inner { display: grid; gap: 1.5rem; }
+
+.footer__lead {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  line-height: 1;
+}
+
+.footer__small {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: .75rem;
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line-on-dark);
+  color: var(--muted-on-dark);
+  font-size: .9rem;
+}
+.footer__small a { text-decoration: underline; text-underline-offset: .2em; }
+
+
+/* ==================================================================
+   11. RESPONSIVE
+   Rules below only apply on narrower screens.
+   EDIT: 900px and 800px are the "breakpoints". Raise them if you
+   want the mobile layout to kick in on larger screens.
+   ================================================================== */
+@media (max-width: 900px) {
+  /* Projects: gallery on top, text underneath */
+  .project__inner { grid-template-columns: minmax(0, 1fr); }
+  .project__body  { position: static; max-width: 60ch; }
+
+  .skills { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 800px) {
+  /* Hero stacks: black on top, blue below */
+  .hero { grid-template-columns: minmax(0, 1fr); min-height: auto; }
+  .hero__main { padding-top: 3rem; padding-bottom: 3rem; }
+  .hero__side { min-height: 30rem; }   /* EDIT: height of the panel on phones */
+
+  /* Nav collapses into a Menu button */
+  .nav__toggle { display: block; }
+  .nav__links {
+    position: absolute;
+    top: var(--nav-h);
+    left: 0; right: 0;
+    display: none;
+    flex-direction: column;
+    gap: 0;
+    padding: .5rem var(--gutter) 1rem;
+    background: var(--black);
+  }
+  .nav--open .nav__links { display: flex; }
+  .nav__links a { display: inline-block; padding-block: .7rem; }
+
+  .about__grid { grid-template-columns: minmax(0, 1fr); }
+  .about__photo { max-width: 240px; }
+
+  .contact li { grid-template-columns: minmax(0, 1fr); gap: 0; }
+}

@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- ============================================================
+       HOW THIS PROJECT IS ORGANISED
+       ------------------------------------------------------------
+       index.html  -> the content and structure (this file)
+       style.css   -> colours, fonts, layout, animation
+       script.js   -> menu, scroll highlighting, image reveal
+
+       Keep all three files in the same folder. Put your real
+       images in a folder called "images" next to them.
+       ============================================================ -->
+
+  <title>Jason Siddharta Salim | Creative Technologist</title>
+  <meta name="description"
+    content="Portfolio of Jason Siddharta Salim, a creative technologist working across UI/UX, video, games, code, and music.">
+  <meta name="theme-color" content="#000000">
+
+  <!-- ------------------------------------------------------------
+       [EDIT: FONTS]  Fonts are loaded from Google Fonts.
+       1. Go to fonts.google.com and pick a font.
+       2. Click "Get font" > "Get embed code" > choose <link>.
+       3. Replace the family you want to swap in the URL below.
+       4. Open style.css and change the matching --font-... line
+          at the top (section 1, "Design tokens").
+       ------------------------------------------------------------ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Lexend:wght@300;400;600&family=Noto+Sans+JP:wght@700&family=Yellowtail&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Tells the CSS that JavaScript is running, so the image
+       reveal animation only applies when it can actually play.
+       If JavaScript is off, everything simply shows normally. -->
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+
+<body>
+
+  <a class="skip" href="#about">Skip to content</a>
+
+  <!-- ============================================================
+       NAVIGATION
+       Each link's href must match the id of a section below
+       (about, skills, projects, contact). To add a link, add
+       another <li> and give the target section a matching id.
+       ============================================================ -->
+  <header class="nav" id="nav">
+    <a class="nav__brand" href="#top">Jason Salim</a>
+
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-links">Menu</button>
+
+    <ul class="nav__links" id="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#music">Music</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </header>
+
+  <main>
+
+    <!-- ==========================================================
+         1. HERO
+         Left: name, role, short intro, contact details.
+         Right: the blue panel with the five disciplines.
+         style="--i:0" etc. is the order of the load animation
+         (0 appears first). Change the numbers to reorder, or
+         see "Hero entrance" in style.css to change the speed.
+         ========================================================== -->
+    <section class="hero" id="top">
+
+      <div class="hero__main">
+        <h1 class="hero__name">
+          <span class="hero__line hero__line--shadow" style="--i:0">Jason</span>
+          <span class="hero__line" style="--i:1">Siddharta</span>
+          <span class="hero__line" style="--i:2">Salim</span>
+        </h1>
+
+        <!-- [EDIT: ROLE IMAGE]  Your own "Creative Technologist" artwork,
+             as an SVG so it stays sharp at any zoom or screen size.
+             1. Export it as SVG (in Figma: select the layer > Export >
+                SVG). Turn any text into outlines first, otherwise the
+                font may change on other computers.
+             2. Save it as images/creative-technologist.svg (or change
+                the src below to match your file name).
+             3. Size it with .hero__role in style.css (look for
+                "width"). Height adjusts automatically.
+             4. Optional: set width and height below to your SVG's
+                proportions (e.g. 600 and 150) so the page does not
+                jump while loading.
+             Keep the alt text: screen readers and search engines
+             read it in place of the image. -->
+        <img class="hero__role" style="--i:3" src="assets/vectors/creativetech.svg" alt="Creative Technologist"
+          width="600" height="150">
+
+
+        <p class="hero__tagline" style="--i:4">
+          Combines technology with creative skills to develop interactive, visual, and digital projects.
+        </p>
+
+        <!-- [EDIT: CONTACT]  Change the href (the real link) and the
+             visible text separately. Use mailto: for email and tel:
+             for phone numbers (no spaces or dashes in tel:). -->
+        <ul class="contact" style="--i:5">
+          <li>
+            <span class="contact__label">LinkedIn</span>
+            <a href="https://www.linkedin.com/in/jason-salim-7348b1414/" target="_blank"
+              rel="noopener">linkedin.com/in/jason-salim-7348b1414</a>
+          </li>
+          <li>
+            <span class="contact__label">Email</span>
+            <a href="mailto:jsalim7399@gmail.com">jsalim7399@gmail.com</a>
+          </li>
+          <li>
+            <span class="contact__label">Phone</span>
+            <a href="tel:+6281808287399">+62 818-0828-7399</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Each word jumps to a related project. Change the href to
+           point somewhere else, or swap <a> for <span> to make the
+           word plain text. -->
+      <aside class="hero__side" aria-label="What I make">
+        <ul class="hero__words">
+          <li style="--i:0"><a href="#chimatcha">Design</a></li>
+          <li style="--i:1"><a href="#video-edits">Video</a></li>
+          <li style="--i:2"><a href="#visor">Game</a></li>
+          <li style="--i:3"><a href="#christian-wijaya">Code</a></li>
+          <li style="--i:4"><a href="#music">Music</a></li>
+        </ul>
+
+        <p class="hero__title" aria-hidden="true">Home Page</p>
+      </aside>
+    </section>
+
+
+    <!-- ==========================================================
+         2. ABOUT
+         ========================================================== -->
+    <section class="section about" id="about">
+      <div class="wrap about__grid">
+
+        <!-- [EDIT: IMAGE]  Your photo or illustration.
+             HOW TO ADD A REAL IMAGE (same for every grey box on the page):
+               1. Put the file in the images folder, e.g. images/jason.jpg
+               2. Inside the grey <div class="ph ..."> add:
+                    <img src="images/jason.jpg" alt="Describe the image">
+               3. (Optional) delete the <span> label and the role= and
+                  aria-label= attributes, since the img's alt text now
+                  does that job.
+             The image is automatically cropped to fill the box, so
+             you do not need to resize it first. -->
+        <figure class="about__photo">
+          <img src="assets/images/pfp.png" alt="Portrait of Jason Siddharta Salim">
+          <img class="about__signature" src="assets/images/ttd.png" alt="Signature of Jason Siddharta Salim">
+        </figure>
+
+        <p class="about__text">
+          Hi, I'm Jason. I make things, and I have a hard time sticking to just one medium. I work across programming,
+          graphic design, UI/UX, game design, and music, moving between code and creativity depending on what the
+          project needs. I enjoy taking an idea from a rough concept and turning it into something people can see, use,
+          hear, or interact with.
+        </p>
+      </div>
+    </section>
+
+
+    <!-- ==========================================================
+         3. SKILLS
+         To add a skill, copy one whole <li class="skill"> block.
+         <strong> is the bold word, <span> is the light word.
+         ========================================================== -->
+    <section class="section skills-section" id="skills">
+      <div class="wrap">
+
+        <!-- Big heading with a handwritten word laid over it.
+             The script word is decoration only (aria-hidden), so
+             change its text or delete that span freely. -->
+        <h2 class="big-heading">
+          Skillsets
+          <img class="cursive__skill" src="assets/vectors/Skillsets.svg" alt="Skills">
+        </h2>
+
+        <ul class="skills">
+          <li class="skill">
+            <h3 class="skill__title"><strong>Graphic</strong> <span>designing</span></h3>
+            <p class="skill__desc">Typography, graphic design, UI/UX design and analysis, prototyping</p>
+            <p class="skill__tools">Figma, Adobe Photoshop, Canva</p>
+          </li>
+
+          <li class="skill">
+            <h3 class="skill__title"><strong>Video</strong> <span>editing</span></h3>
+            <p class="skill__desc">Subtitles, kinetic typography, music videos, meme editing</p>
+            <p class="skill__tools">Adobe Premiere Pro</p>
+          </li>
+
+          <li class="skill">
+            <h3 class="skill__title"><strong>Web</strong> <span>programming</span></h3>
+            <p class="skill__desc">Front-end</p>
+            <p class="skill__tools">HTML5, CSS, JavaScript</p>
+          </li>
+
+          <li class="skill">
+            <h3 class="skill__title"><strong>Game</strong> <span>developing</span></h3>
+            <p class="skill__desc">Game design, game programming, game UI</p>
+            <p class="skill__tools">Unity C#</p>
+          </li>
+
+          <li class="skill">
+            <h3 class="skill__title"><strong>Music</strong> <span>producing</span></h3>
+            <p class="skill__desc">Original soundtrack, extended plays</p>
+            <p class="skill__tools">FL Studio</p>
+          </li>
+
+          <li class="skill">
+            <h3 class="skill__title"><strong>Language</strong></h3>
+            <p class="skill__desc">Indonesian, English</p>
+            <p class="skill__tools">Fluent</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+
+    <!-- ==========================================================
+         4. PROJECT GALLERY
+         Every project is one <article class="project"> block with
+         two halves:
+           - .gallery       the grey image placeholders (left)
+           - .project__body the title and text (right)
+
+         TO ADD A NEW PROJECT: copy a whole <article> block, paste
+         it below the last one, then change the id, text, and
+         placeholders.
+
+         GALLERY LAYOUTS (class on the .gallery div):
+           gallery--phones   3 tall phone screens side by side
+           gallery--grid     2 x 2 grid of landscape images
+           gallery--feature  one wide image on top, two below
+         To add or remove an image, add or remove a
+         <div class="ph ..."> line. Shapes: ph--portrait (phone),
+         ph--landscape (16:10), ph--tall (4:5), ph--square.
+         ========================================================== -->
+    <section class="projects" id="projects">
+
+      <div class="wrap projects__head">
+        <h2 class="big-heading">
+          Project Gallery
+          <img class="cursive__proj" src="assets/vectors/Selected Works.svg" alt="Project Gallery">
+        </h2>
+      </div>
+
+      <!-- ------------------------- CHIMATCHA ------------------------- -->
+      <article class="project" id="chimatcha">
+        <div class="project__inner">
+          <img class="project__image" src="assets/images/chimat.png" alt="Chimatcha app" loading="lazy">
+
+          <div class="project__body">
+            <!-- 抹茶 means "matcha". Its look is .title__jp in style.css -->
+            <img src="assets/images/logochimatc.png" alt="Chimatcha logo title" width="70%">
+            <p class="project__subtitle">Online mobile matcha e-commerce app</p>
+
+            <p>Designed the end-to-end UI/UX for a matcha e-commerce app, including user flows, wireframes, and
+              high-fidelity interfaces.</p>
+
+            <h4 class="project__label">Key highlights</h4>
+            <ul class="highlights">
+              <li>Developed the visual identity, color palette, typography, layouts, and UI components.</li>
+              <li>Used pastel greens and white to create a minimalistic but premium feel.</li>
+              <li>Designed clean product cards with imagery, ratings, and pricing for easy browsing.</li>
+              <li>Created a promotional carousel and intuitive navigation for a seamless shopping experience.</li>
+            </ul>
+
+            <p class="project__tools"><strong>Tools:</strong> Figma</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- ---------------------- FOOD DELIVERY APP ---------------------- -->
+      <article class="project" id="food-delivery">
+        <div class="project__inner">
+          <img class="project__image" src="assets/images/ECOMM.png" alt="Food Delivery App preview" loading="lazy">
+
+          <div class="project__body">
+            <h3 class="title title--stack">
+              <span>Food Delivery</span>
+              <span>App</span>
+            </h3>
+            <p class="project__subtitle">Food delivery mobile app concept</p>
+
+            <p>Designed the end-to-end UI/UX, including user flows, wireframes, and high-fidelity interfaces, with a
+              focus on a clean and intuitive food ordering experience.</p>
+
+            <h4 class="project__label">Key highlights</h4>
+            <ul class="highlights">
+              <li>Developed the visual identity, typography, layouts, and UI components using a light blue and white
+                palette.</li>
+              <li>Designed intuitive food categories and icons for easier discovery and re-ordering.</li>
+              <li>Created a personalized home feed based on user preferences, order history, and search behavior.</li>
+              <li>Designed a streamlined one-page checkout with clear order, address, and delivery sections.</li>
+            </ul>
+
+            <p class="project__tools"><strong>Tools:</strong> Figma</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- ---------------------- CHRISTIAN WIJAYA ---------------------- -->
+      <article class="project" id="christian-wijaya">
+        <div class="project__inner">
+
+          <img class="project__image" src="assets/images/CHRISWIJ.png" alt="Christian Wijaya website preview" loading="lazy">
+
+          <div class="project__body">
+            <img src="assets/images/Christian Wijayattl.png" alt="Christian Wijaya title">
+            <p class="project__subtitle">E-commerce website</p>
+
+            <p>Designed and developed an end-to-end e-commerce website for a personal fashion brand, combining a refined
+              visual identity with a seamless shopping experience.</p>
+
+            <h4 class="project__label">Key highlights</h4>
+            <ul class="highlights">
+              <li>Designed high-fidelity UI and intuitive user flows with a clean, high-fashion aesthetic.</li>
+              <li>Created a structured product grid and high-contrast typography to showcase apparel and accessories.
+              </li>
+              <li>Applied familiar e-commerce patterns for intuitive navigation, product browsing, and checkout.</li>
+              <li>Translated Figma prototypes into a responsive and interactive website using HTML, CSS, and JavaScript.
+              </li>
+            </ul>
+
+            <p class="project__tools"><strong>Tools:</strong> Figma, HTML5, CSS, JavaScript</p>
+            <!-- [EDIT: LINK]  To link to the live site, add:
+                 <a class="project__link" href="https://your-link.com">Visit the site</a> -->
+          </div>
+        </div>
+      </article>
+
+      <!-- ------------------------- VISOR ------------------------- -->
+      <article class="project" id="visor">
+        <div class="project__inner">
+
+          <img class="project__image project__image--visor" src="assets/images/visor.png" width="70%" alt="Visor game preview" loading="lazy">
+
+          <div class="project__body">
+            <img src="assets/images/VISORtitle.png" alt="Visor title" width="70%">
+            <p class="project__subtitle">Cyberpunk-inspired game</p>
+
+            <p>Designed a cyberpunk-inspired HUD and system interface for a third-person narrative action game,
+              balancing gameplay clarity with an immersive, dystopian visual style.</p>
+
+            <h4 class="project__label">Key highlights</h4>
+            <ul class="highlights">
+              <li>Designed minimal HUD elements for health, objectives, and weapon status while maintaining
+                environmental visibility.</li>
+              <li>Developed a monochromatic interface with neon red and cyan accents to reinforce the cyberpunk
+                aesthetic.</li>
+              <li>Created a glitch-inspired Game Over screen with distorted typography, warning elements, and system
+                alerts.</li>
+              <li>Prioritized readability and quick information scanning during high-pressure gameplay.</li>
+            </ul>
+
+            <p class="project__tools"><strong>Tools:</strong> Figma, Adobe Photoshop</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- ------------------------ LAZELITE ------------------------ -->
+      <article class="project" id="lazelite">
+        <div class="project__inner">
+
+          <img class="project__image" src="assets/images/lazelie.png" alt="Lazelite game preview" loading="lazy">
+
+          <div class="project__body">
+            <img src="assets/images/lazeltite.png" alt="Lazelite title">
+            <p class="project__subtitle">2D roguelike RPG game</p>
+
+            <p>Designed a cohesive UI system for a sci-fi/fantasy turn-based RPG, covering the player experience from
+              title screen to combat and game-over states.</p>
+
+            <h4 class="project__label">Key highlights</h4>
+            <ul class="highlights">
+              <li>Designed the complete UI/UX system, including HUD, menus, pause, title, gameplay, and game-over
+                screens.</li>
+              <li>Developed a unified blue and white visual identity with custom typography and UI components.</li>
+              <li>Created a tactical combat HUD with clear health bars, character states, and action controls for quick
+                decision-making.</li>
+              <li>Balanced detailed game environments with high-contrast typography and structured layouts for better
+                readability.</li>
+              <li>Produced the original soundtrack and sound effects to enhance the overall gameplay experience.</li>
+            </ul>
+
+            <p class="project__tools"><strong>Tools:</strong> Figma, Adobe Photoshop</p>
+            <!-- [EDIT: AUDIO]  To let visitors hear the soundtrack, add:
+                 <audio controls src="audio/lazelite-ost.mp3"></audio> -->
+          </div>
+        </div>
+      </article>
+
+      <!-- ----------------------- VIDEO EDITS ----------------------- -->
+      <article class="project" id="video-edits">
+        <div class="project__inner">
+
+          <div class="gallery gallery--videos">
+            <div class="ph ph--landscape">
+              <img src="assets/gifvid/3bee2d8d0dd6d4505fcd377041bf940a-ezgif.com-video-to-gif-converter.gif"
+                alt="Video edit gif preview 1" loading="lazy">
+            </div>
+            <div class="ph ph--landscape">
+              <img src="assets/gifvid/ezgif.com-video-1231to-gif-converter.gif" alt="Video edit gif preview 2" loading="lazy">
+            </div>
+            <div class="ph ph--landscape">
+              <img src="assets/gifvid/ezgif.com-video-to-gif-converter (1).gif" alt="Video edit gif preview 3" loading="lazy">
+            </div>
+            <div class="ph ph--landscape">
+              <img src="assets/gifvid/ezgif.com-video-to-gif-converter.gif" alt="Video edit gif preview 4" loading="lazy">
+            </div>
+            <div class="ph ph--landscape">
+              <img src="assets/gifvid/meme/ezgif.com-video-to-gif-converter (2).gif" alt="Meme video edit gif preview 1" loading="lazy">
+            </div>
+            <div class="ph ph--landscape">
+              <img src="assets/gifvid/meme/gif1-ezgif.com-video-to-gif-converter.gif" alt="Meme video edit gif preview 2" loading="lazy">
+            </div>
+            <div class="ph ph--landscape">
+              <img src="assets/gifvid/meme/2026-10-0200-04-56-ezgif.com-cut.gif" alt="Meme video edit gif preview 3" loading="lazy">
+            </div>
+          </div>
+
+          <div class="project__body project__body--vids">
+            <h3 class="title title--stack">
+              <span>Video</span>
+              <span>Edits</span>
+            </h3>
+
+            <!-- Channel name with a small round logo placeholder -->
+            <p class="project__brand">
+              <a class="project__brand-link" href="https://www.youtube.com/channel/UCVhGJ6BgWjtkkXy47OLBmeg" target="_blank" rel="noopener">
+                <img class="project__logo" src="assets/images/profilechannel.jpg" alt="Fervent channel logo">
+                <span>Fervent</span>
+              </a>
+            </p>
+            <p class="project__subtitle">Video edits and motion content collection</p>
+
+            <p>A collection of gaming-focused video projects exploring music editing, kinetic typography, motion
+              graphics, and visual storytelling.</p>
+
+            <h4 class="project__label">Key highlights</h4>
+            <ul class="highlights">
+              <li>Created fast-paced gaming edits, AMVs, memes, subtitles, and character-focused music videos.</li>
+              <li>Synchronized cuts, transitions, typography, and visual effects with music to enhance pacing and
+                storytelling.</li>
+              <li>Applied motion graphics, dynamic subtitles, color grading, and sound design across varied content.
+              </li>
+              <li>Managed the full production process from concept and editing to publishing.</li>
+              <li>Grew the channel to 623 subscribers, with a top-performing video surpassing 60K views.</li>
+            </ul>
+
+            <p class="project__tools"><strong>Tools:</strong> Adobe Premiere Pro, Adobe Photoshop, Figma</p>
+            <!-- [EDIT: LINK]  To link to the channel, add:
+                 <a class="project__link" href="https://youtube.com/@yourchannel">Watch the channel</a> -->
+          </div>
+        </div>
+      </article>
+
+    </section>
+  </main>
+
+  <!-- ==========================================================
+     5. MUSIC
+     TO ADD A TRACK: copy one <li class="track"> block.
+     href        = the audio file (put files in an "audio" folder)
+     data-cover  = optional cover image. Leave it out for the
+                   blue number tile.
+     ========================================================== -->
+<section class="music" id="music">
+  <div class="wrap">
+    <h2 class="big-heading">Music</h2>
+    <p class="music__intro">Original soundtracks and extended plays, produced in FL Studio.</p>
+
+    <div class="player" id="player" aria-label="Music player">
+      <audio class="player__audio" preload="metadata"></audio>
+
+      <div class="player__cover">
+        <img src="" alt="" hidden>
+        <span class="player__cover-num">01</span>
+      </div>
+
+      <div class="player__main">
+        <p class="player__kicker">Now playing</p>
+        <h3 class="player__title">Track title</h3>
+        <p class="player__meta">Project name</p>
+
+        <div class="player__progress">
+          <input class="player__range player__seek" type="range" min="0" max="100" step="0.1" value="0"
+            aria-label="Seek">
+          <div class="player__times">
+            <span class="player__current">0:00</span>
+            <span class="player__duration">0:00</span>
+          </div>
+        </div>
+
+        <div class="player__controls">
+          <button class="player__btn player__prev" type="button" aria-label="Previous track">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M6 5h2v14H6zM20 5v14L9 12z"/></svg>
+          </button>
+
+          <button class="player__btn player__btn--main player__play" type="button" aria-label="Play">
+            <svg class="icon-play" viewBox="0 0 24 24" width="26" height="26" fill="currentColor" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg>
+            <svg class="icon-pause" viewBox="0 0 24 24" width="26" height="26" fill="currentColor" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>
+          </button>
+
+          <button class="player__btn player__next" type="button" aria-label="Next track">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M16 5h2v14h-2zM4 5v14l11-7z"/></svg>
+          </button>
+
+          <label class="player__volume">
+            <span>Vol</span>
+            <input class="player__range player__vol" type="range" min="0" max="1" step="0.01" value="0.8"
+              aria-label="Volume">
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <ol class="tracklist" aria-label="Tracklist">
+      <li class="track">
+        <a href="/assets/music/act_boss03.mp3" data-cover="\assets\images\AlbumCov.png">
+          <span class="track__num"></span>
+          <span class="track__text">
+            <strong class="track__title">act_boss 03</strong>
+            <span class="track__meta">Lazelite OST</span>
+          </span>
+        </a>
+      </li>
+
+      <li class="track">
+        <a href="/assets/music/" data-cover="\assets\images\AlbumCov.png">
+          <span class="track__num"></span>
+          <span class="track__text">
+            <strong class="track__title">Coming soon...</strong>
+            <span class="track__meta">Coming soon...</span>
+          </span>
+        </a>
+      </li>
+      <!-- copy a <li class="track"> block above for each new track -->
+    </ol>
+  </div>
+</section>
+
+  <!-- ============================================================
+       FOOTER / CONTACT
+       The nav's "Contact" link scrolls here (id="contact").
+       ============================================================ -->
+  <footer class="footer" id="contact">
+    <div class="wrap footer__inner">
+      <p class="footer__lead">Get in touch</p>
+
+      <ul class="contact">
+        <li>
+          <span class="contact__label">LinkedIn</span>
+          <a href="https://www.linkedin.com/in/jason-salim-7348b1414/" target="_blank"
+            rel="noopener">linkedin.com/in/jason-salim-7348b1414</a>
+        </li>
+        <li>
+          <span class="contact__label">Email</span>
+          <a href="mailto:jsalim7399@gmail.com">jsalim7399@gmail.com</a>
+        </li>
+        <li>
+          <span class="contact__label">Phone</span>
+          <a href="tel:+6281808287399">+62 818-0828-7399</a>
+        </li>
+      </ul>
+
+      <div class="footer__small">
+        <!-- The year is filled in automatically by script.js -->
+        <p>&copy; <span data-year>2026</span> Jason Siddharta Salim</p>
+        <a href="#top">Back to top</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
