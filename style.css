@@ -1141,3 +1141,90 @@ section[id], article[id], footer[id] { scroll-margin-top: var(--nav-h); }
 
   .contact li { grid-template-columns: minmax(0, 1fr); gap: 0; }
 }
+
+/* ==================================================================
+   MOBILE FIXES (added)
+   Everything below only applies on screens 900px wide or narrower,
+   so the desktop layout is untouched. It sits at the very end of the
+   file on purpose: later rules win, so it overrides the desktop
+   values above without you having to edit them.
+   ================================================================== */
+@media (max-width: 900px) {
+
+  /* Safety net: never allow sideways scrolling on a phone.
+     "clip" (unlike "hidden") does not break position: sticky. */
+  html, body { overflow-x: clip; }
+
+  /* PROJECT IMAGES: on desktop they are 145% wide and pulled left so
+     they bleed out of their column. In the one-column mobile layout
+     that pushes them off the left edge of the screen. Reset them. */
+  .project__image,
+  .project__image--visor {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  /* Handwritten SVGs over the headings: -2rem/-2.5rem pushed them
+     past the left edge of the screen. */
+  .cursive__skill,
+  .cursive__proj { left: 0; }
+
+  /* Easier to drag with a thumb */
+  .player__range { height: 1.75rem; }
+}
+
+@media (max-width: 800px) {
+
+  /* HERO: the 5rem white bar is huge on a phone, and the -1vh
+     margin makes the hero tuck under the nav. */
+  .hero {
+    border-bottom-width: 1.5rem;   /* EDIT: thickness of the white bar on phones */
+    margin-top: 0;
+  }
+  .hero__name { font-size: clamp(2.6rem, 13vw, 4.5rem); }   /* EDIT: name size on phones */
+
+.about__grid {
+    padding-left: 0;
+    gap: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .about__photo { 
+    margin-inline: auto;
+    margin-bottom: 3rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Reset the desktop 17% left margin so the picture stays centered */
+  .about__photo > :first-child {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Center the signature underneath the profile picture */
+  .about__signature {
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -4rem;
+    width: 85%;
+  }
+
+  /* Center the about text and remove left margins */
+  .about__text {
+    margin-left: 20px;
+    max-width: none;
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  /* Long titles may wrap instead of overflowing */
+  .title--stack,
+  .title--chimatcha { overflow-wrap: anywhere; }
+}
