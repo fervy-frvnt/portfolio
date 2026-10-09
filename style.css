@@ -527,6 +527,12 @@ section[id], article[id], footer[id] { scroll-margin-top: var(--nav-h); }
   border-top: 1px solid var(--line-on-dark);
 }
 
+.dividerSkill {
+  position: relative;
+  border: none;
+  border-top: 1px solid var(--line-on-dark);
+}
+
 .cursive__skill {
   position: absolute;
   left: -2.5rem;
@@ -566,6 +572,7 @@ section[id], article[id], footer[id] { scroll-margin-top: var(--nav-h); }
 
 .skill__desc  { color: var(--muted-on-dark); font-weight: 300; }
 .skill__tools { margin-top: .15rem; }
+.skill__prog { color: var(--muted-on-dark); font-size: clamp(0.75rem, 2.5vw, 0.9rem);}
 
 
 /* ==================================================================
