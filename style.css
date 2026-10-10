@@ -600,9 +600,10 @@ section[id], article[id], footer[id] { scroll-margin-top: var(--nav-h); }
 }
 
 .project__image {
-  width: 145%;
-  max-width: none;       /* lifts the default limit that stops it growing past the column */
-  margin-left: -50%;     /* shifts it left so the extra width spills outward */
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin-left: 0;
 }
 
 .project__image--visor {
