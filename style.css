@@ -92,8 +92,8 @@
      --dur-intro  the load-in animation of the hero
      --reveal-stagger  delay between images in one gallery
      Bigger numbers = slower. Set any to 0s to switch that off.     */
-  --ease:           cubic-bezier(.2, .7, .2, 1);
-  --dur-fast:       .2s;
+  --ease:           cubic-bezier(.2, .4, .2, 1);
+  --dur-fast:       .3s;
   --dur-reveal:     .8s;
   --dur-intro:      .9s;
   --reveal-stagger: 90ms;
@@ -629,6 +629,8 @@ section[id], article[id], footer[id] { scroll-margin-top: var(--nav-h); }
   max-width: 46ch;
 }
 
+
+
 .project__body--vids {
   position: sticky;
 }
@@ -640,6 +642,9 @@ section[id], article[id], footer[id] { scroll-margin-top: var(--nav-h); }
 }
 .project__label    { margin-top: .5rem; font-size: 1rem; font-weight: 600; }
 .project__tools    { color: var(--muted-on-light); }
+
+
+
 .project__tools strong { color: var(--text-on-light); font-weight: 600; }
 
 .highlights { list-style: disc; padding-left: 1.2rem; display: grid; gap: .55rem; }
@@ -647,9 +652,13 @@ section[id], article[id], footer[id] { scroll-margin-top: var(--nav-h); }
 
 .project__link {
   justify-self: start;
+  color: var(--muted-on-light);
+  transition: color var(--dur-fast) var(--ease);
   font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: .2em;
+}
+
+.project__link:hover {
+  color: var(--blue);
 }
 
 .project__brand {
